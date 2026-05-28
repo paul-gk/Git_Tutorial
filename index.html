@@ -1,0 +1,243 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.wrap{padding:1.5rem 0;max-width:680px}
+h1{font-size:22px;font-weight:500;margin-bottom:0.25rem}
+.sub{font-size:14px;color:var(--color-text-secondary);margin-bottom:2rem}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.tab{padding:6px 14px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);transition:all 0.15s}
+.tab.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+.panel{display:none}.panel.active{display:block}
+h2{font-size:16px;font-weight:500;margin:1.5rem 0 0.75rem}
+h2:first-child{margin-top:0}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:0.75rem}
+.cmd-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 16px;align-items:start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.cmd-row:last-child{border-bottom:none;padding-bottom:0}
+.cmd-row:first-child{padding-top:0}
+code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F1FB;padding:2px 6px;border-radius:4px;word-break:break-all}
+.dark code{color:#85B7EB;background:#042C53}
+.desc{font-size:13px;color:var(--color-text-secondary);line-height:1.5}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);font-weight:500;margin-bottom:6px}
+.b-blue{background:#E6F1FB;color:#0C447C}
+.b-green{background:#EAF3DE;color:#3B6D11}
+.b-amber{background:#FAEEDA;color:#854F0B}
+.b-red{background:#FCEBEB;color:#A32D2D}
+.b-teal{background:#E1F5EE;color:#0F6E56}
+.b-purple{background:#EEEDFE;color:#3C3489}
+.flow{display:flex;flex-direction:column;gap:6px}
+.step{display:flex;gap:10px;align-items:flex-start}
+.num{width:22px;height:22px;border-radius:50%;background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);font-size:12px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.step-body{flex:1}
+.step-title{font-size:14px;font-weight:500;margin-bottom:2px}
+.step-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.5}
+.arrow{text-align:center;font-size:12px;color:var(--color-text-tertiary);padding:2px 0 2px 32px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.scene{border-left:2px solid var(--color-border-secondary);padding-left:12px;margin-bottom:1rem}
+.scene-q{font-size:13px;font-weight:500;margin-bottom:6px}
+.scene-a{font-size:13px;color:var(--color-text-secondary);line-height:1.6}
+.tip{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;font-size:13px;color:var(--color-text-secondary);line-height:1.6;margin-top:0.75rem}
+.tip strong{color:var(--color-text-primary);font-weight:500}
+@media(max-width:500px){.two-col{grid-template-columns:1fr}.cmd-row{grid-template-columns:1fr}}
+</style>
+<h2 class="sr-only">Git 完整参考手册，包含命令速查、工作流、冲突解决和补救方案</h2>
+<div class="wrap">
+<h1>Git 完整参考手册</h1>
+<p class="sub">点击分类快速查找，随时回来复习</p>
+<div class="tabs">
+<button class="tab active" onclick="show('base')">基础操作</button>
+<button class="tab" onclick="show('branch')">分支与合并</button>
+<button class="tab" onclick="show('remote')">远程与 GitHub</button>
+<button class="tab" onclick="show('fix')">补救与撤销</button>
+<button class="tab" onclick="show('flow')">标准工作流</button>
+<button class="tab" onclick="show('scene')">场景速查</button>
+</div>
+
+<div id="base" class="panel active">
+<div class="card">
+<span class="badge b-blue">配置</span>
+<div class="cmd-row"><code>git config --global user.name "名字"</code><span class="desc">设置全局用户名</span></div>
+<div class="cmd-row"><code>git config --global user.email "邮箱"</code><span class="desc">设置全局邮箱</span></div>
+<div class="cmd-row"><code>git config --global --list</code><span class="desc">查看所有全局配置</span></div>
+<div class="cmd-row"><code>git config --global init.defaultBranch main</code><span class="desc">设置默认分支名为 main</span></div>
+</div>
+<div class="card">
+<span class="badge b-teal">仓库初始化</span>
+<div class="cmd-row"><code>git init</code><span class="desc">在当前目录初始化新仓库</span></div>
+<div class="cmd-row"><code>git clone &lt;url&gt;</code><span class="desc">克隆远程仓库到本地，自动设置 origin</span></div>
+</div>
+<div class="card">
+<span class="badge b-purple">暂存与提交</span>
+<div class="cmd-row"><code>git status</code><span class="desc">查看工作区和暂存区状态</span></div>
+<div class="cmd-row"><code>git add &lt;文件&gt;</code><span class="desc">暂存指定文件</span></div>
+<div class="cmd-row"><code>git add .</code><span class="desc">暂存所有改动</span></div>
+<div class="cmd-row"><code>git commit -m "message"</code><span class="desc">提交，message 格式：feat/fix/docs/style/chore: 描述</span></div>
+<div class="cmd-row"><code>git commit --amend -m "新message"</code><span class="desc">修改最后一次提交的内容或 message</span></div>
+<div class="cmd-row"><code>git commit --amend --no-edit</code><span class="desc">修改内容但不改 message</span></div>
+</div>
+<div class="card">
+<span class="badge b-amber">查看历史</span>
+<div class="cmd-row"><code>git log --oneline</code><span class="desc">简洁查看提交历史</span></div>
+<div class="cmd-row"><code>git log --oneline --graph --all</code><span class="desc">图形化显示所有分支历史</span></div>
+<div class="cmd-row"><code>git diff</code><span class="desc">查看工作区与暂存区的差异</span></div>
+<div class="cmd-row"><code>git diff --staged</code><span class="desc">查看暂存区与上次提交的差异</span></div>
+<div class="cmd-row"><code>git reflog</code><span class="desc">查看所有操作历史，终极后悔药</span></div>
+</div>
+</div>
+
+<div id="branch" class="panel">
+<div class="card">
+<span class="badge b-blue">分支操作</span>
+<div class="cmd-row"><code>git branch</code><span class="desc">查看所有本地分支</span></div>
+<div class="cmd-row"><code>git branch -a</code><span class="desc">查看所有分支（含远程追踪）</span></div>
+<div class="cmd-row"><code>git switch -c &lt;分支名&gt;</code><span class="desc">创建并切换到新分支</span></div>
+<div class="cmd-row"><code>git switch &lt;分支名&gt;</code><span class="desc">切换到已有分支</span></div>
+<div class="cmd-row"><code>git branch -d &lt;分支名&gt;</code><span class="desc">删除已合并的分支（安全）</span></div>
+<div class="cmd-row"><code>git branch -D &lt;分支名&gt;</code><span class="desc">强制删除分支（未合并也删）</span></div>
+<div class="cmd-row"><code>git branch -m &lt;旧名&gt; &lt;新名&gt;</code><span class="desc">重命名分支</span></div>
+</div>
+<div class="card">
+<span class="badge b-teal">合并</span>
+<div class="cmd-row"><code>git merge &lt;分支名&gt;</code><span class="desc">把指定分支合并进当前分支</span></div>
+<div class="cmd-row"><code>git merge --no-ff &lt;分支名&gt;</code><span class="desc">强制产生合并提交，不 fast-forward</span></div>
+</div>
+<div class="card">
+<span class="badge b-purple">变基</span>
+<div class="cmd-row"><code>git rebase &lt;分支名&gt;</code><span class="desc">把当前分支变基到指定分支，保持线性历史</span></div>
+<div class="cmd-row"><code>git rebase --continue</code><span class="desc">解决冲突后继续 rebase</span></div>
+<div class="cmd-row"><code>git rebase --abort</code><span class="desc">放弃 rebase，恢复原状</span></div>
+<div class="cmd-row"><code>git rebase -i HEAD~n</code><span class="desc">交互式 rebase，整理最近 n 个提交</span></div>
+</div>
+<div class="card">
+<span class="badge b-amber">冲突解决步骤</span>
+<div class="cmd-row"><span class="desc">1. 打开冲突文件，找到 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> <code>=======</code> <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> 标记</span><span class="desc">三个标记之间是两个版本的内容</span></div>
+<div class="cmd-row"><span class="desc">2. 手动编辑，保留最终想要的内容，删掉所有标记</span><span class="desc">VS Code 点击按钮或直接编辑均可</span></div>
+<div class="cmd-row"><code>git add &lt;冲突文件&gt;</code><span class="desc">3. 标记冲突已解决</span></div>
+<div class="cmd-row"><code>git commit</code><span class="desc">4. 完成合并提交（merge 时用）</span></div>
+<div class="cmd-row"><code>git rebase --continue</code><span class="desc">4. 继续变基（rebase 时用）</span></div>
+</div>
+<div class="tip"><strong>merge vs rebase：</strong>公共分支合并用 merge，本地整理历史 / PR 前同步主分支用 rebase。黄金法则：已推送的公共分支永远不要 rebase。</div>
+</div>
+
+<div id="remote" class="panel">
+<div class="card">
+<span class="badge b-blue">远程管理</span>
+<div class="cmd-row"><code>git remote add origin &lt;url&gt;</code><span class="desc">添加远程仓库，起别名 origin</span></div>
+<div class="cmd-row"><code>git remote -v</code><span class="desc">查看远程仓库地址</span></div>
+<div class="cmd-row"><code>git remote set-url origin &lt;url&gt;</code><span class="desc">修改已有远程地址（如从 HTTPS 换 SSH）</span></div>
+</div>
+<div class="card">
+<span class="badge b-teal">推送与拉取</span>
+<div class="cmd-row"><code>git push -u origin main</code><span class="desc">首次推送并设置上游，之后直接 git push 即可</span></div>
+<div class="cmd-row"><code>git push</code><span class="desc">推送到已设置的上游</span></div>
+<div class="cmd-row"><code>git push -u origin &lt;分支名&gt;</code><span class="desc">推送新分支到远程</span></div>
+<div class="cmd-row"><code>git fetch origin</code><span class="desc">下载远程最新状态，不合并，先看后合</span></div>
+<div class="cmd-row"><code>git pull origin main</code><span class="desc">拉取并用 merge 方式合并（会产生合并提交）</span></div>
+<div class="cmd-row"><code>git pull --rebase origin main</code><span class="desc">拉取并用 rebase 方式合并（推荐，保持线性）</span></div>
+</div>
+<div class="card">
+<span class="badge b-purple">push 被拒绝的标准处理</span>
+<div class="cmd-row"><code>git pull --rebase origin main</code><span class="desc">第一步：先同步远程</span></div>
+<div class="cmd-row"><span class="desc">如有冲突，解决后 git rebase --continue</span><span class="desc">第二步：处理冲突</span></div>
+<div class="cmd-row"><code>git push</code><span class="desc">第三步：再推送</span></div>
+</div>
+<div class="card">
+<span class="badge b-amber">PR 流程</span>
+<div class="cmd-row"><code>git switch -c feature/xxx</code><span class="desc">1. 创建功能分支</span></div>
+<div class="cmd-row"><span class="desc">开发 + 提交，commit message 关联 issue：closes #n</span><span class="desc">2. 开发</span></div>
+<div class="cmd-row"><code>git push -u origin feature/xxx</code><span class="desc">3. 推送分支</span></div>
+<div class="cmd-row"><span class="desc">GitHub 上开 PR → Code Review → 合并</span><span class="desc">4. 提 PR</span></div>
+<div class="cmd-row"><code>git pull origin main</code><span class="desc">5. 本地同步</span></div>
+<div class="cmd-row"><code>git branch -d feature/xxx</code><span class="desc">6. 删除本地分支</span></div>
+</div>
+<div class="card">
+<span class="badge b-green">Fork 工作流（开源贡献）</span>
+<div class="cmd-row"><span class="desc">GitHub 上 fork 原始仓库，clone 自己的副本</span><span class="desc">1. Fork & Clone</span></div>
+<div class="cmd-row"><code>git remote add upstream &lt;原始仓库url&gt;</code><span class="desc">2. 添加原始仓库为 upstream</span></div>
+<div class="cmd-row"><code>git fetch upstream</code><span class="desc">3. 同步原始仓库最新进度</span></div>
+<div class="cmd-row"><code>git rebase upstream/main</code><span class="desc">4. 把本地分支更新到最新</span></div>
+<div class="cmd-row"><code>git push origin feature/xxx</code><span class="desc">5. 推到自己的 fork</span></div>
+<div class="cmd-row"><span class="desc">在 GitHub 上从自己 fork 向原始仓库提 PR</span><span class="desc">6. 提 PR</span></div>
+</div>
+</div>
+
+<div id="fix" class="panel">
+<div class="card">
+<span class="badge b-blue">撤销选择指南</span>
+<div class="cmd-row"><code>git restore &lt;文件&gt;</code><span class="desc">还没 add → 丢弃工作区改动（不可恢复，危险）</span></div>
+<div class="cmd-row"><code>git restore --staged &lt;文件&gt;</code><span class="desc">已经 add → 移出暂存区，改动保留（安全）</span></div>
+<div class="cmd-row"><code>git commit --amend</code><span class="desc">刚提交写错了 → 修改最后一次提交（未推送时用）</span></div>
+<div class="cmd-row"><code>git reset --soft HEAD~n</code><span class="desc">撤销 n 个提交，改动留在暂存区</span></div>
+<div class="cmd-row"><code>git reset --mixed HEAD~n</code><span class="desc">撤销 n 个提交，改动留在工作区（默认）</span></div>
+<div class="cmd-row"><code>git reset --hard HEAD~n</code><span class="desc">撤销 n 个提交，改动直接丢弃（危险）</span></div>
+<div class="cmd-row"><code>git revert &lt;提交ID&gt;</code><span class="desc">已推送的提交 → 创建新提交抵消，不改历史（安全）</span></div>
+</div>
+<div class="card">
+<span class="badge b-red">reflog 救命流程</span>
+<div class="cmd-row"><code>git reflog</code><span class="desc">查看所有操作历史，数字越小越新</span></div>
+<div class="cmd-row"><span class="desc">看描述找到误操作前的那一行，复制那个提交 ID</span><span class="desc">靠描述定位，不要数序号</span></div>
+<div class="cmd-row"><code>git reset --hard &lt;ID&gt;</code><span class="desc">恢复到那个状态（reset 误操作）</span></div>
+<div class="cmd-row"><code>git switch -c &lt;分支名&gt; &lt;ID&gt;</code><span class="desc">从那个 ID 重建分支（误删分支）</span></div>
+</div>
+<div class="tip"><strong>记住：</strong>只要 commit 过，90 天内几乎都能用 reflog 找回来。reset --hard 和 restore 是真正危险的操作，执行前想清楚。</div>
+</div>
+
+<div id="flow" class="panel">
+<h2>个人项目标准工作流</h2>
+<div class="card">
+<div class="flow">
+<div class="step"><div class="num">1</div><div class="step-body"><div class="step-title">开始新功能</div><div class="step-desc"><code>git switch -c feature/功能名</code> — 永远在 feature 分支上开发，不要直接改 main</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">2</div><div class="step-body"><div class="step-title">原子提交</div><div class="step-desc">每完成一个独立改动就提交，message 格式 <code>feat/fix/docs: 描述</code>，一次提交只做一件事</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">3</div><div class="step-body"><div class="step-title">同步主分支</div><div class="step-desc"><code>git pull --rebase origin main</code> — 定期同步，避免积累大量冲突</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">4</div><div class="step-body"><div class="step-title">推送分支</div><div class="step-desc"><code>git push -u origin feature/功能名</code> — 推送到远程</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">5</div><div class="step-body"><div class="step-title">合并回 main</div><div class="step-desc">个人项目直接 merge；团队项目开 PR，等 Code Review 通过后合并</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">6</div><div class="step-body"><div class="step-title">清理</div><div class="step-desc"><code>git branch -d feature/功能名</code> — 合并后删分支，保持列表干净</div></div></div>
+</div>
+</div>
+
+<h2>团队协作标准工作流</h2>
+<div class="card">
+<div class="flow">
+<div class="step"><div class="num">1</div><div class="step-body"><div class="step-title">领取任务，创建 Issue</div><div class="step-desc">在 GitHub Issues 里记录要做的事，获得 Issue 编号（如 #5）</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">2</div><div class="step-body"><div class="step-title">从最新 main 创建分支</div><div class="step-desc"><code>git pull origin main</code> 确保本地最新，再 <code>git switch -c feature/xxx</code></div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">3</div><div class="step-body"><div class="step-title">开发 + 定期同步</div><div class="step-desc">每天或每隔几天 <code>git pull --rebase origin main</code>，避免长期偏离主线</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">4</div><div class="step-body"><div class="step-title">提 PR，关联 Issue</div><div class="step-desc">PR description 里写 <code>closes #5</code>，PR 保持小而专注，一个 PR 只做一件事</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">5</div><div class="step-body"><div class="step-title">Code Review</div><div class="step-desc">根据意见修改后继续推送到同一 feature 分支，PR 自动更新</div></div></div>
+<div class="arrow">↓</div>
+<div class="step"><div class="num">6</div><div class="step-body"><div class="step-title">合并 + 同步</div><div class="step-desc">PR 合并后 <code>git pull origin main</code> 同步本地，删掉 feature 分支</div></div></div>
+</div>
+</div>
+<div class="tip"><strong>团队铁律：</strong>永远不直接推 main · PR 保持小而专注 · 定期同步主分支 · 不 force push 公共分支</div>
+</div>
+
+<div id="scene" class="panel">
+<h2>遇到问题怎么办</h2>
+<div class="scene"><div class="scene-q">push 被拒绝，提示 remote contains work...</div><div class="scene-a"><code>git pull --rebase origin main</code> → 解决冲突（如有）→ <code>git push</code></div></div>
+<div class="scene"><div class="scene-q">合并出现冲突，有 &lt;&lt;&lt;&lt;&lt;&lt;&lt; 标记</div><div class="scene-a">打开文件手动编辑保留最终内容，删掉所有标记 → <code>git add 文件</code> → <code>git commit</code></div></div>
+<div class="scene"><div class="scene-q">commit message 写错了</div><div class="scene-a">还没推送：<code>git commit --amend -m "新message"</code><br>已推送：只能用 revert 或接受</div></div>
+<div class="scene"><div class="scene-q">误用 reset --hard 删掉了提交</div><div class="scene-a"><code>git reflog</code> 找到误操作前的 ID → <code>git reset --hard &lt;ID&gt;</code></div></div>
+<div class="scene"><div class="scene-q">误删了分支</div><div class="scene-a"><code>git reflog</code> 找到该分支最后一个提交 ID → <code>git switch -c 分支名 &lt;ID&gt;</code></div></div>
+<div class="scene"><div class="scene-q">已推送的提交有 bug 需要撤销</div><div class="scene-a"><code>git revert &lt;提交ID&gt;</code> → <code>git push</code>（不改历史，安全）</div></div>
+<div class="scene"><div class="scene-q">想把队友的最新 main 同步到我的 feature 分支</div><div class="scene-a"><code>git switch feature/xxx</code> → <code>git pull --rebase origin main</code></div></div>
+<div class="scene"><div class="scene-q">不小心在 main 上做了修改没提交</div><div class="scene-a"><code>git stash</code> 暂存改动 → <code>git switch -c feature/xxx</code> → <code>git stash pop</code> 恢复改动</div></div>
+<div class="scene"><div class="scene-q">想参与开源项目</div><div class="scene-a">Fork → Clone → <code>git remote add upstream &lt;原始仓库&gt;</code> → 开分支开发 → 提 PR</div></div>
+<div class="scene"><div class="scene-q">把密码文件提交了</div><div class="scene-a">立刻撤销密钥 → <code>git filter-repo --path 文件 --invert-paths</code> → force push → 团队重新 clone</div></div>
+</div>
+</div>
+
+<script>
+function show(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
