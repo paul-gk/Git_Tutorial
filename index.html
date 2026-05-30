@@ -1,16 +1,34 @@
 <style>
+:root {
+  --font-sans: 'PingFang SC', 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, "Liberation Mono", Menlo, monospace;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #475569;
+  --color-text-tertiary: #94a3b8;
+  --color-border-primary: #cbd5e1;
+  --color-border-secondary: #e2e8f0;
+  --color-border-tertiary: #f1f5f9;
+  --color-background-primary: #ffffff;
+  --color-background-secondary: #f8fafc;
+  --border-radius-md: 6px;
+  --border-radius-lg: 12px;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);color:var(--color-text-primary)}
-.wrap{padding:1.5rem 0;max-width:680px}
-h1{font-size:22px;font-weight:500;margin-bottom:0.25rem}
+body{font-family:var(--font-sans);color:var(--color-text-primary);background-color: #f1f5f9;}
+.wrap{padding:2.5rem 3rem;max-width:880px;margin:3rem auto;background:#ffffff;border-radius:12px;box-shadow:0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);}
+h1{font-size:28px;font-weight:600;margin-bottom:0.5rem;color:#0f172a}
 .sub{font-size:14px;color:var(--color-text-secondary);margin-bottom:2rem}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem;position:sticky;top:0;background:#ffffff;padding:0.75rem 0;z-index:10;border-bottom:0.5px solid var(--color-border-tertiary)}
 .tab{padding:6px 14px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);transition:all 0.15s}
-.tab.active{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+.tab:hover{background:var(--color-background-secondary);border-color:var(--color-border-primary)}
+.tab.active{background:#0f172a;color:#ffffff;border-color:#0f172a;font-weight:500}
 .panel{display:none}.panel.active{display:block}
 h2{font-size:16px;font-weight:500;margin:1.5rem 0 0.75rem}
 h2:first-child{margin-top:0}
-.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:0.75rem}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:0.75rem;transition:box-shadow 0.15s}
+.card:hover{box-shadow:0 2px 8px -2px rgba(0,0,0,0.06)}
+.card:has(.b-red){border-left:2.5px solid #E5A0A0}
+.tip br{content:"";display:block;margin-bottom:5px}
 .cmd-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 16px;align-items:start;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
 .cmd-row:last-child{border-bottom:none;padding-bottom:0}
 .cmd-row:first-child{padding-top:0}
@@ -37,17 +55,39 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 .scene-a{font-size:13px;color:var(--color-text-secondary);line-height:1.6}
 .tip{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;font-size:13px;color:var(--color-text-secondary);line-height:1.6;margin-top:0.75rem}
 .tip strong{color:var(--color-text-primary);font-weight:500}
-@media(max-width:500px){.two-col{grid-template-columns:1fr}.cmd-row{grid-template-columns:1fr}}
+@media(max-width:768px){.wrap{margin:0;padding:1.5rem;border-radius:0;box-shadow:none;min-height:100vh}.two-col{grid-template-columns:1fr}.cmd-row{grid-template-columns:1fr}}
+/* 图解动画 */
+.viz{background:var(--color-background-secondary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem}
+.viz-title{font-size:15px;font-weight:600;color:#0f172a;margin-bottom:4px}
+.viz-desc{font-size:13px;color:var(--color-text-secondary);line-height:1.5;margin-bottom:12px}
+.viz-stage{background:#ffffff;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.viz-stage svg{display:block;width:100%;height:auto}
+.viz-ctrl{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.viz-btn{padding:7px 16px;font-size:13px;font-weight:500;border:0.5px solid #0f172a;border-radius:var(--border-radius-md);background:#0f172a;color:#fff;cursor:pointer;transition:opacity .15s}
+.viz-btn:hover{opacity:.85}
+.viz-btn.ghost{background:#fff;color:var(--color-text-secondary);border-color:var(--color-border-primary)}
+.viz-btn:disabled{opacity:.4;cursor:not-allowed}
+.viz-step-label{font-size:12.5px;color:var(--color-text-secondary);margin-left:auto;font-family:var(--font-mono)}
+.viz-caption{font-size:12.5px;color:var(--color-text-secondary);line-height:1.55;margin-top:10px;min-height:34px;background:#fff;border-radius:6px;padding:8px 12px;border:0.5px solid var(--color-border-tertiary)}
+.viz-caption code{font-size:12px}
+.viz-node{transition:all .55s cubic-bezier(.4,0,.2,1)}
+.viz-node-label{font-family:var(--font-mono);font-size:11px;font-weight:600}
+.viz-edge{transition:all .55s cubic-bezier(.4,0,.2,1)}
+.viz-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.viz-pill{padding:5px 12px;font-size:12.5px;border:0.5px solid var(--color-border-secondary);border-radius:20px;cursor:pointer;background:#fff;color:var(--color-text-secondary);transition:all .15s}
+.viz-pill.active{background:#E6F1FB;color:#0C447C;border-color:#9CC5EC;font-weight:500}
 </style>
-<h2 class="sr-only">Git 完整参考手册，包含命令速查、工作流、冲突解决和补救方案</h2>
 <div class="wrap">
 <h1>Git 完整参考手册</h1>
-<p class="sub">点击分类快速查找，随时回来复习</p>
+<p class="sub">点击分类快速查找，随时回来复习 · 覆盖本地操作 / 分支合并 / 远程协作 / 概念辨析 / VS Code / 排错急救</p>
 <div class="tabs">
 <button class="tab active" onclick="show('base')">基础操作</button>
 <button class="tab" onclick="show('branch')">分支与合并</button>
 <button class="tab" onclick="show('remote')">远程与 GitHub</button>
 <button class="tab" onclick="show('fix')">补救与撤销</button>
+<button class="tab" onclick="show('concept')">概念辨析</button>
+<button class="tab" onclick="show('visual')">图解动画</button>
+<button class="tab" onclick="show('vscode')">VS Code</button>
 <button class="tab" onclick="show('flow')">标准工作流</button>
 <button class="tab" onclick="show('scene')">场景速查</button>
 </div>
@@ -67,20 +107,45 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 </div>
 <div class="card">
 <span class="badge b-purple">暂存与提交</span>
-<div class="cmd-row"><code>git status</code><span class="desc">查看工作区和暂存区状态</span></div>
+<div class="cmd-row"><code>git status</code><span class="desc">查看工作区和暂存区状态，养成 commit 前先 status 的习惯</span></div>
 <div class="cmd-row"><code>git add &lt;文件&gt;</code><span class="desc">暂存指定文件</span></div>
-<div class="cmd-row"><code>git add .</code><span class="desc">暂存所有改动</span></div>
+<div class="cmd-row"><code>git add .</code><span class="desc">暂存「当前目录及子目录」的改动，受所在目录限制</span></div>
+<div class="cmd-row"><code>git add -A</code><span class="desc">暂存「整个仓库」的改动，不管你 cd 到哪，最稳</span></div>
+<div class="cmd-row"><code>git add -p</code><span class="desc">交互式挑选，把同一个文件里的「部分改动」分开暂存（p=patch）</span></div>
 <div class="cmd-row"><code>git commit -m "message"</code><span class="desc">提交，message 格式：feat/fix/docs/style/chore: 描述</span></div>
-<div class="cmd-row"><code>git commit --amend -m "新message"</code><span class="desc">修改最后一次提交的内容或 message</span></div>
-<div class="cmd-row"><code>git commit --amend --no-edit</code><span class="desc">修改内容但不改 message</span></div>
+<div class="cmd-row"><code>git commit -am "message"</code><span class="desc">暂存+提交一步走，但 -a 只对「已跟踪」文件有效，新文件带不上</span></div>
+<div class="cmd-row"><code>git commit --amend --no-edit</code><span class="desc">补文件进上一个提交但不改 message（先 git add 漏掉的文件）</span></div>
+<div class="cmd-row"><code>git commit --amend -m "新message"</code><span class="desc">同时改上一个提交的内容和 message（仅限未 push）</span></div>
 </div>
 <div class="card">
-<span class="badge b-amber">查看历史</span>
+<span class="badge b-green">.gitignore</span>
+<div class="cmd-row"><span class="desc">在仓库根目录建 <code>.gitignore</code> 文件，每行一条规则，<strong>并要把它本身提交</strong>，否则队友那边不生效</span><span class="desc">规则示例 ↓</span></div>
+<div class="cmd-row"><code>node_modules/</code><span class="desc">忽略整个目录</span></div>
+<div class="cmd-row"><code>*.log</code><span class="desc">忽略所有 .log 文件</span></div>
+<div class="cmd-row"><code>.env</code><span class="desc">忽略密钥/环境变量文件（重要）</span></div>
+<div class="cmd-row"><code>git rm --cached &lt;文件&gt;</code><span class="desc">关键坑：已被跟踪的文件，光写 .gitignore 挡不住，要先 rm --cached 取消跟踪</span></div>
+</div>
+<div class="card">
+<span class="badge b-amber">查看历史与排查</span>
 <div class="cmd-row"><code>git log --oneline</code><span class="desc">简洁查看提交历史</span></div>
-<div class="cmd-row"><code>git log --oneline --graph --all</code><span class="desc">图形化显示所有分支历史</span></div>
-<div class="cmd-row"><code>git diff</code><span class="desc">查看工作区与暂存区的差异</span></div>
-<div class="cmd-row"><code>git diff --staged</code><span class="desc">查看暂存区与上次提交的差异</span></div>
-<div class="cmd-row"><code>git reflog</code><span class="desc">查看所有操作历史，终极后悔药</span></div>
+<div class="cmd-row"><code>git log --oneline --graph --all</code><span class="desc">图形化显示所有分支历史，最常用</span></div>
+<div class="cmd-row"><code>git log --oneline -- &lt;文件&gt;</code><span class="desc">只看动过某个文件的提交（-- 分隔路径，防止和分支名混淆）</span></div>
+<div class="cmd-row"><code>git log -p &lt;文件&gt;</code><span class="desc">连每次的具体改动一起看</span></div>
+<div class="cmd-row"><code>git blame &lt;文件&gt;</code><span class="desc">逐行追溯：每行最后是谁、哪个提交、何时改的。排查 bug 神器</span></div>
+<div class="cmd-row"><code>git show &lt;提交ID&gt;</code><span class="desc">查看某一个提交的完整改动内容</span></div>
+<div class="cmd-row"><code>git diff</code><span class="desc">工作区 vs 暂存区（改了还没 add 的）</span></div>
+<div class="cmd-row"><code>git diff --staged</code><span class="desc">暂存区 vs 上次提交（已 add 还没 commit 的）。=--cached</span></div>
+<div class="cmd-row"><code>git diff HEAD</code><span class="desc">所有未提交改动 vs 上次提交（工作区+暂存区一起比）</span></div>
+<div class="cmd-row"><code>git reflog</code><span class="desc">HEAD 移动日记，终极后悔药（详见补救页）</span></div>
+</div>
+<div class="card">
+<span class="badge b-red">git bisect（二分查 bug）</span>
+<div class="cmd-row"><span class="desc">用途：在几十上百个提交里，<strong>快速定位是哪个提交引入了 bug</strong>。二分法，100 个提交约 7 次即可锁定</span><span class="desc">流程 ↓</span></div>
+<div class="cmd-row"><code>git bisect start</code><span class="desc">1. 开始二分</span></div>
+<div class="cmd-row"><code>git bisect bad</code><span class="desc">2. 标记当前版本是「坏的」</span></div>
+<div class="cmd-row"><code>git bisect good &lt;旧ID&gt;</code><span class="desc">3. 标记某个确定「好的」旧版本</span></div>
+<div class="cmd-row"><span class="desc">Git 自动跳到中间点，你测试后回答 <code>git bisect good</code> 或 <code>git bisect bad</code>，反复几轮</span><span class="desc">4. 二分定位</span></div>
+<div class="cmd-row"><code>git bisect reset</code><span class="desc">5. 结束，回到正常状态</span></div>
 </div>
 </div>
 
@@ -111,11 +176,26 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 <span class="badge b-amber">冲突解决步骤</span>
 <div class="cmd-row"><span class="desc">1. 打开冲突文件，找到 <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> <code>=======</code> <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> 标记</span><span class="desc">三个标记之间是两个版本的内容</span></div>
 <div class="cmd-row"><span class="desc">2. 手动编辑，保留最终想要的内容，删掉所有标记</span><span class="desc">VS Code 点击按钮或直接编辑均可</span></div>
-<div class="cmd-row"><code>git add &lt;冲突文件&gt;</code><span class="desc">3. 标记冲突已解决</span></div>
-<div class="cmd-row"><code>git commit</code><span class="desc">4. 完成合并提交（merge 时用）</span></div>
-<div class="cmd-row"><code>git rebase --continue</code><span class="desc">4. 继续变基（rebase 时用）</span></div>
+<div class="cmd-row"><code>git add &lt;冲突文件&gt;</code><span class="desc">3. 标记冲突已解决（merge 和 rebase 都要这步）</span></div>
+<div class="cmd-row"><code>git commit</code><span class="desc">4a. merge 时：完成合并提交（不用 -m，Git 自动填信息）</span></div>
+<div class="cmd-row"><code>git rebase --continue</code><span class="desc">4b. rebase 时：继续重放下一个提交</span></div>
 </div>
-<div class="tip"><strong>merge vs rebase：</strong>公共分支合并用 merge，本地整理历史 / PR 前同步主分支用 rebase。黄金法则：已推送的公共分支永远不要 rebase。</div>
+<div class="card">
+<span class="badge b-red">⚠ rebase 冲突时 HEAD 方向是反的</span>
+<div class="cmd-row"><span class="desc"><strong>merge 冲突时：</strong><code>&lt;&lt;&lt; HEAD</code> 一侧 = 你当前分支；<code>&gt;&gt;&gt;</code> 一侧 = 被合进来的分支。符合直觉</span><span class="desc">正常方向</span></div>
+<div class="cmd-row"><span class="desc"><strong>rebase 冲突时：</strong><code>&lt;&lt;&lt; HEAD</code> 一侧 = 你正变基到的「目标基底」（如 main）；<code>&gt;&gt;&gt;</code> 一侧 = 你自己正被重放的那个提交。<strong>方向反了！</strong></span><span class="desc">易错！</span></div>
+<div class="cmd-row"><span class="desc">原因：rebase 是把你的提交逐个「贴」到目标分支上，已在底下的目标才是 HEAD，你的改动反而是「传入的一侧」</span><span class="desc">记住这句</span></div>
+</div>
+<div class="card">
+<span class="badge b-teal">stash（临时存改动）</span>
+<div class="cmd-row"><code>git stash</code><span class="desc">把当前改动暂存起来、工作区变干净，用于临时切分支。只存「已跟踪」文件</span></div>
+<div class="cmd-row"><code>git stash -u</code><span class="desc">连未跟踪的新文件一起 stash</span></div>
+<div class="cmd-row"><code>git stash list</code><span class="desc">查看所有 stash 记录</span></div>
+<div class="cmd-row"><code>git stash pop</code><span class="desc">恢复最近一条并从列表删除</span></div>
+<div class="cmd-row"><code>git stash apply</code><span class="desc">恢复但保留记录（可恢复到多个分支）</span></div>
+<div class="cmd-row"><code>git stash pop stash@{2}</code><span class="desc">恢复指定的某一条</span></div>
+</div>
+<div class="tip"><strong>merge vs rebase：</strong>公共/共享分支合并用 merge，本地私有分支整理历史、PR 前同步主分支用 rebase。<br><strong>黄金法则：</strong>判断能不能 rebase 看的不是分支名，而是「改了之后会不会有别人手里的历史对不上」。已 push 且别人在用 = 公共 = 绝不 rebase。<br><strong>共享 feature 分支</strong>（你和同事一起开发同一分支）同步 main 要用 <code>git merge main</code>，不能 rebase，否则同事的历史会对不上。</div>
 </div>
 
 <div id="remote" class="panel">
@@ -127,13 +207,17 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 </div>
 <div class="card">
 <span class="badge b-teal">推送与拉取</span>
-<div class="cmd-row"><code>git push -u origin main</code><span class="desc">首次推送并设置上游，之后直接 git push 即可</span></div>
+<div class="cmd-row"><code>git push -u origin main</code><span class="desc">首次推送并设上游。-u 绑定是「单个分支」级别，只绑 main↔origin/main</span></div>
 <div class="cmd-row"><code>git push</code><span class="desc">推送到已设置的上游</span></div>
-<div class="cmd-row"><code>git push -u origin &lt;分支名&gt;</code><span class="desc">推送新分支到远程</span></div>
-<div class="cmd-row"><code>git fetch origin</code><span class="desc">下载远程最新状态，不合并，先看后合</span></div>
-<div class="cmd-row"><code>git pull origin main</code><span class="desc">拉取并用 merge 方式合并（会产生合并提交）</span></div>
-<div class="cmd-row"><code>git pull --rebase origin main</code><span class="desc">拉取并用 rebase 方式合并（推荐，保持线性）</span></div>
+<div class="cmd-row"><code>git push -u origin &lt;分支名&gt;</code><span class="desc">推送新分支并绑上游。每个新分支都要单独设一次</span></div>
+<div class="cmd-row"><code>git branch -vv</code><span class="desc">查看每个分支绑定的上游，后面 [origin/xxx] 就是</span></div>
+<div class="cmd-row"><code>git config --global push.autoSetupRemote true</code><span class="desc">配一次后，新分支首次 git push 自动建远程分支并绑上游，省去 -u</span></div>
+<div class="cmd-row"><code>git fetch origin</code><span class="desc">只下载远程最新状态，不合并，先看后合</span></div>
+<div class="cmd-row"><code>git pull origin main</code><span class="desc">fetch + merge，会产生合并提交</span></div>
+<div class="cmd-row"><code>git pull --rebase origin main</code><span class="desc">fetch + rebase，保持线性历史，团队推荐</span></div>
+<div class="cmd-row"><code>git push --force-with-lease</code><span class="desc">rebase 过私有分支后推送用它，比 --force 安全：会检查远程有没有别人的新提交</span></div>
 </div>
+<div class="tip"><strong>裸 git pull 能用吗？</strong>取决于「当前分支有没有上游」，而非有没有 push 过。上游来源有三：① <code>git clone</code> 自动设的 ② <code>push -u</code> 设的 ③ <code>git branch --set-upstream-to=origin/main</code> 手动设的。一个都没设过，就必须写全 <code>git pull origin &lt;分支&gt;</code>。</div>
 <div class="card">
 <span class="badge b-purple">push 被拒绝的标准处理</span>
 <div class="cmd-row"><code>git pull --rebase origin main</code><span class="desc">第一步：先同步远程</span></div>
@@ -158,6 +242,27 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 <div class="cmd-row"><code>git push origin feature/xxx</code><span class="desc">5. 推到自己的 fork</span></div>
 <div class="cmd-row"><span class="desc">在 GitHub 上从自己 fork 向原始仓库提 PR</span><span class="desc">6. 提 PR</span></div>
 </div>
+<div class="card">
+<span class="badge b-amber">Fork 后定期同步上游（最容易忘）</span>
+<div class="cmd-row"><span class="desc">你的 fork 不会自动跟上游更新，要手动同步，否则越落越远</span><span class="desc">每隔几天做一次</span></div>
+<div class="cmd-row"><code>git fetch upstream</code><span class="desc">1. 抓取原始仓库最新状态</span></div>
+<div class="cmd-row"><code>git switch main</code><span class="desc">2. 切回 main</span></div>
+<div class="cmd-row"><code>git merge upstream/main</code><span class="desc">3. 把上游最新并进来</span></div>
+<div class="cmd-row"><code>git push origin main</code><span class="desc">4. 推回自己的 fork，让 fork 也最新</span></div>
+</div>
+<div class="card">
+<span class="badge b-purple">PR 与 Issue 关联</span>
+<div class="cmd-row"><span class="desc">在 <strong>PR 描述</strong>或某条 commit message 里写关键字，PR 合并进 main 时<strong>自动关闭</strong>对应 issue</span><span class="desc">写法 ↓</span></div>
+<div class="cmd-row"><code>closes #12</code><span class="desc">close / closes / closed 均可</span></div>
+<div class="cmd-row"><code>fixes #12</code><span class="desc">fix / fixes / fixed 均可</span></div>
+<div class="cmd-row"><code>resolves #12</code><span class="desc">resolve / resolves / resolved 均可</span></div>
+<div class="cmd-row"><span class="desc">Code Review 后按意见改，再 push 到<strong>同一 feature 分支</strong>，PR 会自动更新，不用重开</span><span class="desc">迭代方式</span></div>
+</div>
+<div class="card">
+<span class="badge b-green">GitHub Actions 是什么</span>
+<div class="cmd-row"><span class="desc">GitHub 的<strong>自动化流水线（CI/CD）</strong>。在 <code>.github/workflows/</code> 放 yml 配置，指定「当 push 或开 PR 时」自动跑某些任务</span><span class="desc">作用</span></div>
+<div class="cmd-row"><span class="desc">常见用途：自动跑测试、检查代码风格、自动构建部署。PR 页面会显示 ✓ 或 ✗，红叉就是某项检查没过</span><span class="desc">知道即可</span></div>
+</div>
 </div>
 
 <div id="fix" class="panel">
@@ -179,6 +284,203 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 <div class="cmd-row"><code>git switch -c &lt;分支名&gt; &lt;ID&gt;</code><span class="desc">从那个 ID 重建分支（误删分支）</span></div>
 </div>
 <div class="tip"><strong>记住：</strong>只要 commit 过，90 天内几乎都能用 reflog 找回来。reset --hard 和 restore 是真正危险的操作，执行前想清楚。</div>
+</div>
+
+<div id="concept" class="panel">
+<h2>核心概念辨析</h2>
+<div class="card">
+<span class="badge b-blue">reset 三种模式</span>
+<div class="cmd-row"><code>git reset --soft HEAD~n</code><span class="desc">退到「待提交」：改动留在<strong>暂存区</strong></span></div>
+<div class="cmd-row"><code>git reset --mixed HEAD~n</code><span class="desc">退到「待暂存」：改动留在<strong>工作区</strong>，暂存区也被清空（默认模式）</span></div>
+<div class="cmd-row"><code>git reset --hard HEAD~n</code><span class="desc">全部抹掉：<strong>工作区+暂存区</strong>的改动都丢弃（危险）</span></div>
+</div>
+<div class="card">
+<span class="badge b-teal">reset vs revert</span>
+<div class="cmd-row"><span class="desc"><strong>reset：</strong>把分支指针往回挪，会「删除/重写」历史。只能用于<strong>未推送</strong>的本地提交</span><span class="desc">改历史</span></div>
+<div class="cmd-row"><span class="desc"><strong>revert：</strong>新建一个「反向补丁」提交来抵消，历史只增不改。<strong>已 push 的公共提交必须用它</strong></span><span class="desc">不改历史</span></div>
+<div class="cmd-row"><span class="desc">为什么公共提交不能用 reset：重写历史会让其他协作者本地历史对不上，再 pull 一团乱</span><span class="desc">原因</span></div>
+</div>
+<div class="card">
+<span class="badge b-purple">merge vs rebase</span>
+<div class="cmd-row"><span class="desc"><strong>merge：</strong>找共同祖先，两边改动一次性融合，产生一个<strong>合并提交</strong>，历史留分叉。冲突只解决一次</span><span class="desc">保留真实历史</span></div>
+<div class="cmd-row"><span class="desc"><strong>rebase：</strong>把当前分支的提交逐个「重放」到目标后面，<strong>不产生合并提交</strong>，历史是直线。提交 ID 全部重写，可能要解决多次冲突</span><span class="desc">线性历史</span></div>
+<div class="cmd-row"><span class="desc">rebase 改的是<strong>当前分支</strong>的提交 ID，目标分支（如 main）完全不受影响</span><span class="desc">关键</span></div>
+</div>
+<div class="card">
+<span class="badge b-green">fast-forward 是什么</span>
+<div class="cmd-row"><span class="desc">当 main 的历史完全包含在 feature 里（没分叉），merge 时 Git 只是<strong>把 main 指针往前挪</strong>到 feature 位置</span><span class="desc">移动指针</span></div>
+<div class="cmd-row"><span class="desc">不产生新提交、不修改文件、不可能冲突，因为根本没有「融合」动作发生</span><span class="desc">所以无冲突</span></div>
+<div class="cmd-row"><code>git merge --no-ff</code><span class="desc">强制产生合并提交，即使能 ff 也保留一个分支汇合点</span></div>
+</div>
+<div class="card">
+<span class="badge b-amber">reflog 原理</span>
+<div class="cmd-row"><span class="desc">reflog 是「HEAD 移动的日记本」，记录指针去过哪些提交 ID。reset --hard 删掉的提交其实没真删，只是没分支指向它，成了「悬空对象」躺在 .git 里</span><span class="desc">能救命的原理</span></div>
+<div class="cmd-row"><span class="desc">特性：① 本地私有，不会 push 也不随 clone ② 自动过期（可达 90 天 / 不可达 30 天）③ 出事要趁早救</span><span class="desc">三个特性</span></div>
+</div>
+<div class="card">
+<span class="badge b-red">三个区域 / 三类文件状态</span>
+<div class="cmd-row"><span class="desc"><strong>工作区</strong>（你编辑的文件）→ <code>git add</code> → <strong>暂存区</strong>（待提交快照）→ <code>git commit</code> → <strong>版本库</strong>（历史）</span><span class="desc">数据流向</span></div>
+<div class="cmd-row"><span class="desc"><strong>untracked</strong>（新文件，Git 没管过）→ add 后变 <strong>tracked</strong>。-a 和 .gitignore 的很多坑都源于这个区别</span><span class="desc">跟踪状态</span></div>
+</div>
+</div>
+
+<div id="visual" class="panel">
+<h2>交互图解：点按钮一步步看 Git 在干什么</h2>
+<p class="viz-desc">下面每个图解都可以点「下一步」逐步推进，配合下方说明理解每一步发生了什么。蓝色=main，紫色=feature，灰色=共同祖先。</p>
+
+<div class="viz">
+<div class="viz-title">Merge vs Rebase 对比</div>
+<div class="viz-desc">同样是把 feature 整合进 main，两种方式的历史形状完全不同。先选一种，再点「下一步」。</div>
+<div class="viz-tabs">
+<span class="viz-pill active" data-mode="merge" onclick="vizMR.setMode('merge',this)">Merge 方式</span>
+<span class="viz-pill" data-mode="rebase" onclick="vizMR.setMode('rebase',this)">Rebase 方式</span>
+</div>
+<div class="viz-stage">
+<svg id="mr-svg" viewBox="0 0 660 260" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="viz-caption" id="mr-cap"></div>
+<div class="viz-ctrl">
+<button class="viz-btn" id="mr-next" onclick="vizMR.next()">下一步 ▶</button>
+<button class="viz-btn ghost" onclick="vizMR.reset()">重置</button>
+<span class="viz-step-label" id="mr-step"></span>
+</div>
+</div>
+
+<div class="viz">
+<div class="viz-title">Fast-forward（快进合并）</div>
+<div class="viz-desc">main 没有任何新提交时，合并 feature 只是把 main 指针「快进」到 feature 位置，不产生合并提交，也不可能冲突。</div>
+<div class="viz-stage">
+<svg id="ff-svg" viewBox="0 0 660 180" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="viz-caption" id="ff-cap"></div>
+<div class="viz-ctrl">
+<button class="viz-btn" id="ff-next" onclick="vizFF.next()">下一步 ▶</button>
+<button class="viz-btn ghost" onclick="vizFF.reset()">重置</button>
+<span class="viz-step-label" id="ff-step"></span>
+</div>
+</div>
+
+<div class="viz">
+<div class="viz-title">三个区域：add 与 commit 在搬什么</div>
+<div class="viz-desc">一处改动从「工作区」到进入「版本库」要经过暂存区。看文件块怎么一步步流转。</div>
+<div class="viz-stage">
+<svg id="area-svg" viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="viz-caption" id="area-cap"></div>
+<div class="viz-ctrl">
+<button class="viz-btn" id="area-next" onclick="vizArea.next()">下一步 ▶</button>
+<button class="viz-btn ghost" onclick="vizArea.reset()">重置</button>
+<span class="viz-step-label" id="area-step"></span>
+</div>
+</div>
+
+<div class="viz">
+<div class="viz-title">Reset 三种模式的区别</div>
+<div class="viz-desc">把 HEAD 退回上一个提交时，--soft / --mixed / --hard 对暂存区和工作区的影响不同。选一种看结果。</div>
+<div class="viz-tabs">
+<span class="viz-pill active" data-mode="soft" onclick="vizReset.setMode('soft',this)">--soft</span>
+<span class="viz-pill" data-mode="mixed" onclick="vizReset.setMode('mixed',this)">--mixed</span>
+<span class="viz-pill" data-mode="hard" onclick="vizReset.setMode('hard',this)">--hard</span>
+</div>
+<div class="viz-stage">
+<svg id="rs-svg" viewBox="0 0 660 210" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="viz-caption" id="rs-cap"></div>
+<div class="viz-ctrl">
+<button class="viz-btn" id="rs-next" onclick="vizReset.next()">执行 reset ▶</button>
+<button class="viz-btn ghost" onclick="vizReset.reset()">重置</button>
+<span class="viz-step-label" id="rs-step"></span>
+</div>
+</div>
+
+<div class="viz">
+<div class="viz-title">Reset vs Revert：撤销一个提交的两种方式</div>
+<div class="viz-desc">假设提交 C 引入了 bug，要撤销它。reset 是「抹掉历史」，revert 是「追加反向补丁」。选一种看区别。</div>
+<div class="viz-tabs">
+<span class="viz-pill active" data-mode="reset" onclick="vizRR.setMode('reset',this)">git reset</span>
+<span class="viz-pill" data-mode="revert" onclick="vizRR.setMode('revert',this)">git revert</span>
+</div>
+<div class="viz-stage">
+<svg id="rr-svg" viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="viz-caption" id="rr-cap"></div>
+<div class="viz-ctrl">
+<button class="viz-btn" id="rr-next" onclick="vizRR.next()">执行 ▶</button>
+<button class="viz-btn ghost" onclick="vizRR.reset()">重置</button>
+<span class="viz-step-label" id="rr-step"></span>
+</div>
+</div>
+
+<div class="viz">
+<div class="viz-title">完整 Pull Request 协作流程</div>
+<div class="viz-desc">团队协作的核心流程。点「下一步」走完从建分支到合并清理的全过程，看本地、远程、PR 三方如何配合。</div>
+<div class="viz-stage">
+<svg id="pr-svg" viewBox="0 0 660 280" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="viz-caption" id="pr-cap"></div>
+<div class="viz-ctrl">
+<button class="viz-btn" id="pr-next" onclick="vizPR.next()">下一步 ▶</button>
+<button class="viz-btn ghost" onclick="vizPR.reset()">重置</button>
+<span class="viz-step-label" id="pr-step"></span>
+</div>
+</div>
+
+<div class="viz">
+<div class="viz-title">GitHub 合并 PR 的三个选项</div>
+<div class="viz-desc">在 GitHub 点 Merge 时有三种方式，对最终 main 历史的形状影响很大。选一种看结果。feature 分支上有 3 个零碎提交。</div>
+<div class="viz-tabs">
+<span class="viz-pill active" data-mode="merge" onclick="vizGM.setMode('merge',this)">Create a merge commit</span>
+<span class="viz-pill" data-mode="squash" onclick="vizGM.setMode('squash',this)">Squash and merge</span>
+<span class="viz-pill" data-mode="rebase" onclick="vizGM.setMode('rebase',this)">Rebase and merge</span>
+</div>
+<div class="viz-stage">
+<svg id="gm-svg" viewBox="0 0 660 240" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<div class="viz-caption" id="gm-cap"></div>
+<div class="viz-ctrl">
+<button class="viz-btn" id="gm-next" onclick="vizGM.next()">执行合并 ▶</button>
+<button class="viz-btn ghost" onclick="vizGM.reset()">重置</button>
+<span class="viz-step-label" id="gm-step"></span>
+</div>
+</div>
+
+<div class="tip"><strong>提示：</strong>这些图是为了帮你建立直觉，真实的 Git 历史可以用 <code>git log --oneline --graph --all</code> 查看，或在 VS Code 装 Git Graph 扩展可视化浏览。</div>
+</div>
+
+<div id="vscode" class="panel">
+<h2>VS Code 里怎么操作（对照命令行）</h2>
+<div class="tip">理解 GUI 背后执行了什么命令，比单纯记按钮重要。下面每个操作都给出对应的命令行等价物。</div>
+<div class="card">
+<span class="badge b-blue">Source Control 面板</span>
+<div class="cmd-row"><span class="desc">左侧分支图标（或 Ctrl/Cmd+Shift+G）打开。改动的文件列在 <strong>Changes</strong> 下</span><span class="desc">≈ git status</span></div>
+<div class="cmd-row"><span class="desc">文件旁点 <strong>+</strong> 号 = 暂存该文件；点文件名看左右<strong>对比 diff</strong></span><span class="desc">≈ git add / git diff</span></div>
+<div class="cmd-row"><span class="desc">顶部输入框写 message，点 <strong>✓ Commit</strong></span><span class="desc">≈ git commit -m</span></div>
+<div class="cmd-row"><span class="desc">untracked 新文件带 <strong>U</strong> 标记，单独列出。提交前扫一眼别漏</span><span class="desc">注意</span></div>
+</div>
+<div class="card">
+<span class="badge b-red">⚠ 没暂存直接 Commit 的行为</span>
+<div class="cmd-row"><span class="desc">没点任何 + 就按 Commit，VS Code 弹窗问是否「暂存所有改动并提交」，点 Yes 等价于 <code>git commit -a</code></span><span class="desc">≈ commit -a</span></div>
+<div class="cmd-row"><span class="desc"><strong>关键：</strong>这只包含「已跟踪」文件，<strong>全新的 untracked 文件不会被带进去</strong>，必须先手动点 + 暂存</span><span class="desc">易踩坑</span></div>
+<div class="cmd-row"><span class="desc">设置项 <code>git.enableSmartCommit</code> 开了就不再弹窗，但新手建议关着，弹窗能提醒你别漏暂存</span><span class="desc">建议</span></div>
+</div>
+<div class="card">
+<span class="badge b-teal">分支操作</span>
+<div class="cmd-row"><span class="desc"><strong>左下角状态栏</strong>显示当前分支名，点它 → 弹出分支列表，可切换或新建</span><span class="desc">≈ git switch</span></div>
+<div class="cmd-row"><span class="desc">列表里选「Create new branch」</span><span class="desc">≈ git switch -c</span></div>
+<div class="cmd-row"><span class="desc">状态栏的 ↑↓ 同步箭头 = 推送/拉取，数字表示领先/落后远程几个提交</span><span class="desc">≈ git push / pull</span></div>
+</div>
+<div class="card">
+<span class="badge b-amber">解决冲突（三方对比界面）</span>
+<div class="cmd-row"><span class="desc">合并冲突时，冲突文件标红。打开后每段冲突上方有可点的按钮</span><span class="desc">可视化解决</span></div>
+<div class="cmd-row"><span class="desc"><strong>Accept Current</strong>（保留当前分支）· <strong>Accept Incoming</strong>（保留传入分支）· <strong>Accept Both</strong>（两个都留）· 也可直接手动编辑</span><span class="desc">四个选项</span></div>
+<div class="cmd-row"><span class="desc">点 <strong>Resolve in Merge Editor</strong> 进三方对比：左=当前、右=传入、下=最终结果，勾选要的部分</span><span class="desc">推荐</span></div>
+<div class="cmd-row"><span class="desc"><strong>注意：</strong>rebase 冲突时 Current 和 Incoming 的含义和 merge 是反的（同命令行）</span><span class="desc">易错</span></div>
+</div>
+<div class="card">
+<span class="badge b-purple">推荐扩展</span>
+<div class="cmd-row"><span class="desc"><strong>GitLens</strong>：每行代码末尾直接显示「谁、何时、哪个提交」改的（行内 blame）；可视化看分支/提交历史、对比任意两个版本、查看文件演变</span><span class="desc">最有用</span></div>
+<div class="cmd-row"><span class="desc"><strong>Git Graph</strong>：一键画出漂亮的分支提交图，比命令行 --graph 直观，可视化操作合并/变基</span><span class="desc">看历史</span></div>
+</div>
 </div>
 
 <div id="flow" class="panel">
@@ -222,7 +524,14 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 <h2>遇到问题怎么办</h2>
 <div class="scene"><div class="scene-q">push 被拒绝，提示 remote contains work...</div><div class="scene-a"><code>git pull --rebase origin main</code> → 解决冲突（如有）→ <code>git push</code></div></div>
 <div class="scene"><div class="scene-q">合并出现冲突，有 &lt;&lt;&lt;&lt;&lt;&lt;&lt; 标记</div><div class="scene-a">打开文件手动编辑保留最终内容，删掉所有标记 → <code>git add 文件</code> → <code>git commit</code></div></div>
-<div class="scene"><div class="scene-q">commit message 写错了</div><div class="scene-a">还没推送：<code>git commit --amend -m "新message"</code><br>已推送：只能用 revert 或接受</div></div>
+<div class="scene"><div class="scene-q">刚提交完发现漏加了一个文件 / message 写错</div><div class="scene-a">未推送：<code>git add 漏掉的文件</code> → <code>git commit --amend --no-edit</code>（只补文件）或 <code>git commit --amend -m "新message"</code>（连 message 一起改）</div></div>
+<div class="scene"><div class="scene-q">想把一个文件里的部分改动分开提交</div><div class="scene-a"><code>git add -p</code> 交互式挑选要暂存的代码块，分多次 commit</div></div>
+<div class="scene"><div class="scene-q">改到一半要紧急切分支修 bug</div><div class="scene-a"><code>git stash</code>（有新文件用 <code>git stash -u</code>）→ 切分支修好提交 → 切回来 <code>git stash pop</code></div></div>
+<div class="scene"><div class="scene-q">和同事共享同一个 feature 分支，要同步 main</div><div class="scene-a"><code>git pull</code>（先拉同事的）→ <code>git merge main</code>。<strong>不能用 rebase</strong>，否则同事历史对不上</div></div>
+<div class="scene"><div class="scene-q">不知道是哪个提交引入了 bug</div><div class="scene-a"><code>git bisect start</code> → <code>git bisect bad</code> → <code>git bisect good 旧ID</code> → 二分测试 → <code>git bisect reset</code></div></div>
+<div class="scene"><div class="scene-q">想知道某一行代码是谁、何时改的</div><div class="scene-a"><code>git blame 文件名</code>，或在 VS Code 装 GitLens 看行内提示</div></div>
+<div class="scene"><div class="scene-q">rebase 私有分支后 push 被拒</div><div class="scene-a"><code>git push --force-with-lease</code>（比 --force 安全，会检查远程有没有别人的新提交）</div></div>
+<div class="scene"><div class="scene-q">不小心把已被跟踪的文件加进 .gitignore 却没生效</div><div class="scene-a"><code>git rm --cached 文件</code> 取消跟踪，再提交。.gitignore 只能挡没被跟踪过的文件</div></div>
 <div class="scene"><div class="scene-q">误用 reset --hard 删掉了提交</div><div class="scene-a"><code>git reflog</code> 找到误操作前的 ID → <code>git reset --hard &lt;ID&gt;</code></div></div>
 <div class="scene"><div class="scene-q">误删了分支</div><div class="scene-a"><code>git reflog</code> 找到该分支最后一个提交 ID → <code>git switch -c 分支名 &lt;ID&gt;</code></div></div>
 <div class="scene"><div class="scene-q">已推送的提交有 bug 需要撤销</div><div class="scene-a"><code>git revert &lt;提交ID&gt;</code> → <code>git push</code>（不改历史，安全）</div></div>
@@ -234,10 +543,432 @@ code{font-family:var(--font-mono);font-size:12.5px;color:#0C447C;background:#E6F
 </div>
 
 <script>
-function show(id){
+function show(id, el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  var panel = document.getElementById(id);
+  if(panel) panel.classList.add('active');
+  if(el) el.classList.add('active');
 }
+document.querySelectorAll('.tab').forEach(function(tab){
+  tab.addEventListener('click', function(){
+    var m = (tab.getAttribute('onclick')||'').match(/show\('(\w+)'\)/);
+    if(m) show(m[1], tab);
+  });
+});
+
+/* ===== 图解动画 ===== */
+var SVGNS='http://www.w3.org/2000/svg';
+var COL={main:'#0C447C',mainBg:'#E6F1FB',feat:'#3C3489',featBg:'#EEEDFE',base:'#94a3b8',baseBg:'#f1f5f9',merge:'#0F6E56',mergeBg:'#E1F5EE',ghost:'#cbd5e1'};
+function el(name,attrs){var e=document.createElementNS(SVGNS,name);for(var k in attrs)e.setAttribute(k,attrs[k]);return e;}
+function clear(svg){while(svg.firstChild)svg.removeChild(svg.firstChild);}
+// 画一个提交节点(圆+标签);返回节点组,可后续改 transform 实现移动
+function commit(svg,x,y,label,fill,stroke,opacity){
+  var g=el('g',{transform:'translate('+x+','+y+')','class':'viz-node'});
+  if(opacity!=null)g.setAttribute('opacity',opacity);
+  g.appendChild(el('circle',{r:16,fill:fill,stroke:stroke,'stroke-width':2}));
+  var t=el('text',{x:0,y:4,'text-anchor':'middle',fill:stroke,'class':'viz-node-label'});
+  t.textContent=label;g.appendChild(t);
+  svg.appendChild(g);return g;
+}
+function edge(svg,x1,y1,x2,y2,color){
+  var l=el('line',{x1:x1,y1:y1,x2:x2,y2:y2,stroke:color||COL.ghost,'stroke-width':2,'class':'viz-edge'});
+  svg.insertBefore(l,svg.firstChild);return l;
+}
+function ptr(svg,x,y,label,color){
+  var g=el('g',{transform:'translate('+x+','+y+')','class':'viz-node'});
+  var w=label.length*8+16;
+  g.appendChild(el('rect',{x:-w/2,y:-11,width:w,height:22,rx:5,fill:color,opacity:.92}));
+  var t=el('text',{x:0,y:4,'text-anchor':'middle',fill:'#fff','class':'viz-node-label'});
+  t.textContent=label;g.appendChild(t);
+  svg.appendChild(g);return g;
+}
+
+/* --- Merge vs Rebase --- */
+var vizMR=(function(){
+  var mode='merge',step=0;
+  var caps={
+    merge:[
+      '初始：main 和 feature 从共同祖先 <code>A</code> 分叉，各自有了新提交。',
+      '执行 <code>git merge feature</code>（站在 main 上）。Git 找到共同祖先 A，把两边改动融合。',
+      '产生一个<strong>合并提交 M</strong>，它有两个父提交。历史保留了分叉的形状，feature 的提交 ID 不变。',
+      '完成。merge 的特点：保留真实历史、只解决一次冲突、留下一个合并节点。'
+    ],
+    rebase:[
+      '初始：main 和 feature 从共同祖先 <code>A</code> 分叉，各自有了新提交。',
+      '执行 <code>git rebase main</code>（站在 feature 上）。Git 把 feature 独有的提交「摘下来」。',
+      '把这些提交<strong>逐个重放</strong>到 main 的最新提交后面，生成<strong>新的提交 ID</strong>（D′、E′）。',
+      '完成。历史变成一条直线，没有合并提交。注意 feature 的提交 ID 全变了（重写历史）。'
+    ]
+  };
+  function render(){
+    var svg=document.getElementById('mr-svg');clear(svg);
+    var capEl=document.getElementById('mr-cap');
+    var y1=80,y2=170,bx=90,gap=110;
+    // 共同祖先 A
+    if(mode==='merge'){
+      edge(svg,bx,(y1+y2)/2,bx,(y1+y2)/2);
+      // base
+      var ax=bx, ay=(y1+y2)/2;
+      // main 链
+      commit(svg,ax,ay,'A',COL.baseBg,COL.base);
+      edge(svg,ax,ay,bx+gap,y1,COL.main);
+      commit(svg,bx+gap,y1,'B',COL.mainBg,COL.main);
+      edge(svg,bx+gap,y1,bx+gap*2,y1,COL.main);
+      commit(svg,bx+gap*2,y1,'C',COL.mainBg,COL.main);
+      // feature 链
+      edge(svg,ax,ay,bx+gap,y2,COL.feat);
+      commit(svg,bx+gap,y2,'D',COL.featBg,COL.feat);
+      edge(svg,bx+gap,y2,bx+gap*2,y2,COL.feat);
+      commit(svg,bx+gap*2,y2,'E',COL.featBg,COL.feat);
+      if(step>=2){
+        // 合并提交 M
+        edge(svg,bx+gap*2,y1,bx+gap*3,(y1+y2)/2,COL.merge);
+        edge(svg,bx+gap*2,y2,bx+gap*3,(y1+y2)/2,COL.merge);
+        commit(svg,bx+gap*3,(y1+y2)/2,'M',COL.mergeBg,COL.merge);
+        ptr(svg,bx+gap*3,(y1+y2)/2-34,'main',COL.main);
+      } else {
+        ptr(svg,bx+gap*2,y1-34,'main',COL.main);
+      }
+      ptr(svg,bx+gap*2,y2+38,'feature',COL.feat);
+    } else {
+      // rebase: 演示从分叉到拉直
+      var ax=bx, midY=(y1+y2)/2;
+      if(step<2){
+        commit(svg,ax,midY,'A',COL.baseBg,COL.base);
+        edge(svg,ax,midY,bx+gap,y1,COL.main);
+        commit(svg,bx+gap,y1,'B',COL.mainBg,COL.main);
+        edge(svg,bx+gap,y1,bx+gap*2,y1,COL.main);
+        commit(svg,bx+gap*2,y1,'C',COL.mainBg,COL.main);
+        edge(svg,ax,midY,bx+gap,y2,COL.feat);
+        commit(svg,bx+gap,y2,'D',step===1?COL.ghost:COL.featBg,step===1?COL.ghost:COL.feat,step===1?.45:1);
+        edge(svg,bx+gap,y2,bx+gap*2,y2,step===1?COL.ghost:COL.feat);
+        commit(svg,bx+gap*2,y2,'E',step===1?COL.ghost:COL.featBg,step===1?COL.ghost:COL.feat,step===1?.45:1);
+        ptr(svg,bx+gap*2,y1-34,'main',COL.main);
+        ptr(svg,bx+gap*2,y2+38,'feature',COL.feat);
+      } else {
+        // 拉直成一条线
+        commit(svg,ax,midY,'A',COL.baseBg,COL.base);
+        edge(svg,ax,midY,bx+gap,midY,COL.main);
+        commit(svg,bx+gap,midY,'B',COL.mainBg,COL.main);
+        edge(svg,bx+gap,midY,bx+gap*2,midY,COL.main);
+        commit(svg,bx+gap*2,midY,'C',COL.mainBg,COL.main);
+        edge(svg,bx+gap*2,midY,bx+gap*3,midY,COL.feat);
+        commit(svg,bx+gap*3,midY,"D'",COL.featBg,COL.feat);
+        edge(svg,bx+gap*3,midY,bx+gap*4,midY,COL.feat);
+        commit(svg,bx+gap*4,midY,"E'",COL.featBg,COL.feat);
+        ptr(svg,bx+gap*2,midY-34,'main',COL.main);
+        ptr(svg,bx+gap*4,midY+38,'feature',COL.feat);
+      }
+    }
+    capEl.innerHTML=caps[mode][Math.min(step,3)];
+    document.getElementById('mr-step').textContent='步骤 '+(step+1)+' / 4';
+    document.getElementById('mr-next').disabled=(step>=3);
+  }
+  return {
+    setMode:function(m,pill){mode=m;step=0;
+      pill.parentNode.querySelectorAll('.viz-pill').forEach(function(p){p.classList.remove('active');});
+      pill.classList.add('active');render();},
+    next:function(){if(step<3){step++;render();}},
+    reset:function(){step=0;render();},
+    init:render
+  };
+})();
+
+/* --- Fast-forward --- */
+var vizFF=(function(){
+  var step=0;
+  var caps=[
+    '初始：main 指向 B，feature 在 B 之后又前进了 C、D。期间 main 没有任何新提交。',
+    '执行 <code>git merge feature</code>。因为 main 的历史完全包含在 feature 里，没有分叉。',
+    'Git 不创建新提交，只是把 <strong>main 指针「快进」</strong>到 D。两个分支现在指向同一处，历史保持直线、无冲突。'
+  ];
+  function render(){
+    var svg=document.getElementById('ff-svg');clear(svg);
+    var y=90,bx=90,gap=130;
+    commit(svg,bx,y,'A',COL.mainBg,COL.main);
+    edge(svg,bx,y,bx+gap,y,COL.main);
+    commit(svg,bx+gap,y,'B',COL.mainBg,COL.main);
+    edge(svg,bx+gap,y,bx+gap*2,y,COL.feat);
+    commit(svg,bx+gap*2,y,'C',COL.featBg,COL.feat);
+    edge(svg,bx+gap*2,y,bx+gap*3,y,COL.feat);
+    commit(svg,bx+gap*3,y,'D',COL.featBg,COL.feat);
+    var mainX=step>=2?bx+gap*3:bx+gap;
+    ptr(svg,mainX,y-34,'main',COL.main);
+    ptr(svg,bx+gap*3,y+38,'feature',COL.feat);
+    document.getElementById('ff-cap').innerHTML=caps[step];
+    document.getElementById('ff-step').textContent='步骤 '+(step+1)+' / 3';
+    document.getElementById('ff-next').disabled=(step>=2);
+  }
+  return {next:function(){if(step<2){step++;render();}},reset:function(){step=0;render();},init:render};
+})();
+
+/* --- 三个区域 --- */
+var vizArea=(function(){
+  var step=0;
+  var caps=[
+    '你在<strong>工作区</strong>修改了一个文件 file.txt，此时它处于「已修改、未暂存」状态。',
+    '执行 <code>git add file.txt</code>：改动被放进<strong>暂存区</strong>（待提交的快照）。',
+    '执行 <code>git commit</code>：暂存区的内容被永久记录进<strong>版本库</strong>，成为一个提交。工作区和暂存区回到干净状态。'
+  ];
+  function box(svg,x,label){
+    svg.appendChild(el('rect',{x:x,y:40,width:150,height:120,rx:10,fill:'#fff',stroke:COL.base,'stroke-width':1,'stroke-dasharray':'4 3'}));
+    var t=el('text',{x:x+75,y:30,'text-anchor':'middle',fill:COL.base,'font-size':12,'font-weight':600});
+    t.textContent=label;svg.appendChild(t);
+  }
+  function render(){
+    var svg=document.getElementById('area-svg');clear(svg);
+    box(svg,20,'工作区');box(svg,255,'暂存区');box(svg,490,'版本库');
+    // 箭头标注
+    var a1=el('text',{x:215,y:105,'text-anchor':'middle',fill:COL.main,'font-size':11,'font-family':'monospace'});a1.textContent='git add →';svg.appendChild(a1);
+    var a2=el('text',{x:452,y:105,'text-anchor':'middle',fill:COL.merge,'font-size':11,'font-family':'monospace'});a2.textContent='git commit →';svg.appendChild(a2);
+    // 文件块位置随 step 变化
+    var fx=[55,290,525][step];
+    var fill=[COL.featBg,COL.mainBg,COL.mergeBg][step];
+    var stroke=[COL.feat,COL.main,COL.merge][step];
+    var g=el('g',{transform:'translate('+fx+',80)','class':'viz-node'});
+    g.appendChild(el('rect',{x:0,y:0,width:80,height:40,rx:6,fill:fill,stroke:stroke,'stroke-width':2}));
+    var t=el('text',{x:40,y:25,'text-anchor':'middle',fill:stroke,'font-size':12,'font-weight':600});
+    t.textContent='file.txt';g.appendChild(t);svg.appendChild(g);
+    document.getElementById('area-cap').innerHTML=caps[step];
+    document.getElementById('area-step').textContent='步骤 '+(step+1)+' / 3';
+    document.getElementById('area-next').disabled=(step>=2);
+  }
+  return {next:function(){if(step<2){step++;render();}},reset:function(){step=0;render();},init:render};
+})();
+
+/* --- Reset 三模式 --- */
+var vizReset=(function(){
+  var mode='soft',done=false;
+  var caps={
+    soft:{before:'当前 HEAD 在 C。准备执行 <code>git reset --soft B</code>，把 HEAD 退回 B。',after:'<strong>--soft</strong>：HEAD 退回 B，但 C 的改动<strong>留在暂存区</strong>（绿色），随时可重新提交。最温和。'},
+    mixed:{before:'当前 HEAD 在 C。准备执行 <code>git reset --mixed B</code>（默认模式）。',after:'<strong>--mixed</strong>：HEAD 退回 B，C 的改动退到<strong>工作区</strong>（紫色），暂存区被清空，相当于「改了还没 add」。'},
+    hard:{before:'当前 HEAD 在 C。准备执行 <code>git reset --hard B</code>。',after:'<strong>--hard</strong>：HEAD 退回 B，C 的改动<strong>工作区和暂存区全部丢弃</strong>（变灰消失）。危险，但能用 reflog 救回提交。'}
+  };
+  function render(){
+    var svg=document.getElementById('rs-svg');clear(svg);
+    var y=70,bx=110,gap=130;
+    commit(svg,bx,y,'A',COL.mainBg,COL.main);
+    edge(svg,bx,y,bx+gap,y,COL.main);
+    commit(svg,bx+gap,y,'B',COL.mainBg,COL.main);
+    if(!done){
+      edge(svg,bx+gap,y,bx+gap*2,y,COL.main);
+      commit(svg,bx+gap*2,y,'C',COL.mainBg,COL.main);
+      ptr(svg,bx+gap*2,y-34,'HEAD',COL.merge);
+    } else {
+      ptr(svg,bx+gap,y-34,'HEAD',COL.merge);
+      // C 的去向
+      if(mode==='hard'){
+        edge(svg,bx+gap,y,bx+gap*2,y,COL.ghost);
+        commit(svg,bx+gap*2,y,'C','#fff',COL.ghost,.35);
+        var x=el('text',{x:bx+gap*2,y:y+50,'text-anchor':'middle',fill:COL.ghost,'font-size':11});x.textContent='已丢弃';svg.appendChild(x);
+      } else {
+        var areaFill=mode==='soft'?COL.mergeBg:COL.featBg;
+        var areaStroke=mode==='soft'?COL.merge:COL.feat;
+        var areaLabel=mode==='soft'?'暂存区':'工作区';
+        var g=el('g',{transform:'translate('+(bx+gap*2-40)+','+(y+45)+')','class':'viz-node'});
+        g.appendChild(el('rect',{x:0,y:0,width:80,height:38,rx:6,fill:areaFill,stroke:areaStroke,'stroke-width':2}));
+        var t=el('text',{x:40,y:18,'text-anchor':'middle',fill:areaStroke,'font-size':11,'font-weight':600});t.textContent='C 的改动';g.appendChild(t);
+        var t2=el('text',{x:40,y:31,'text-anchor':'middle',fill:areaStroke,'font-size':9.5});t2.textContent='在'+areaLabel;g.appendChild(t2);
+        svg.appendChild(g);
+      }
+    }
+    document.getElementById('rs-cap').innerHTML=done?caps[mode].after:caps[mode].before;
+    document.getElementById('rs-step').textContent=done?'已执行':'就绪';
+    document.getElementById('rs-next').disabled=done;
+  }
+  return {
+    setMode:function(m,pill){mode=m;done=false;
+      pill.parentNode.querySelectorAll('.viz-pill').forEach(function(p){p.classList.remove('active');});
+      pill.classList.add('active');render();},
+    next:function(){done=true;render();},
+    reset:function(){done=false;render();},
+    init:render
+  };
+})();
+
+/* --- Reset vs Revert --- */
+var vizRR=(function(){
+  var mode='reset',done=false;
+  var caps={
+    reset:{before:'当前历史 A→B→C，C 有 bug，HEAD 指向 C。准备 <code>git reset --hard B</code>。',
+      after:'<strong>git reset</strong>：HEAD 退回 B，<strong>C 从历史中消失</strong>（被抹掉）。历史变干净，但这是「改写历史」——如果 C 已经 push 到公共分支，别人那边还有 C，会乱套。<strong>只能用于未推送的提交</strong>。'},
+    revert:{before:'当前历史 A→B→C，C 有 bug，HEAD 指向 C。准备 <code>git revert C</code>。',
+      after:'<strong>git revert</strong>：不删 C，而是<strong>新增一个提交 C⁻¹</strong>，它的改动正好抵消 C。历史是 A→B→C→C⁻¹，只增不改。<strong>已 push 的公共提交必须用这个</strong>，因为它不改写任何已有历史。'}
+  };
+  function render(){
+    var svg=document.getElementById('rr-svg');clear(svg);
+    var y=95,bx=90,gap=120;
+    commit(svg,bx,y,'A',COL.mainBg,COL.main);
+    edge(svg,bx,y,bx+gap,y,COL.main);
+    commit(svg,bx+gap,y,'B',COL.mainBg,COL.main);
+    if(mode==='reset'){
+      if(!done){
+        edge(svg,bx+gap,y,bx+gap*2,y,COL.main);
+        commit(svg,bx+gap*2,y,'C',COL.featBg,COL.feat);
+        ptr(svg,bx+gap*2,y-34,'HEAD',COL.merge);
+        var bug=el('text',{x:bx+gap*2,y:y+44,'text-anchor':'middle',fill:COL.feat,'font-size':11});bug.textContent='🐞 有 bug';svg.appendChild(bug);
+      } else {
+        edge(svg,bx+gap,y,bx+gap*2,y,COL.ghost);
+        commit(svg,bx+gap*2,y,'C','#fff',COL.ghost,.3);
+        var gone=el('text',{x:bx+gap*2,y:y+44,'text-anchor':'middle',fill:COL.ghost,'font-size':11});gone.textContent='已抹除';svg.appendChild(gone);
+        ptr(svg,bx+gap,y-34,'HEAD',COL.merge);
+      }
+    } else {
+      edge(svg,bx+gap,y,bx+gap*2,y,COL.main);
+      commit(svg,bx+gap*2,y,'C',COL.featBg,COL.feat);
+      if(!done){
+        ptr(svg,bx+gap*2,y-34,'HEAD',COL.merge);
+        var bug2=el('text',{x:bx+gap*2,y:y+44,'text-anchor':'middle',fill:COL.feat,'font-size':11});bug2.textContent='🐞 有 bug';svg.appendChild(bug2);
+      } else {
+        edge(svg,bx+gap*2,y,bx+gap*3,y,COL.merge);
+        commit(svg,bx+gap*3,y,'C⁻¹',COL.mergeBg,COL.merge);
+        ptr(svg,bx+gap*3,y-34,'HEAD',COL.merge);
+        var fix=el('text',{x:bx+gap*3,y:y+44,'text-anchor':'middle',fill:COL.merge,'font-size':11});fix.textContent='抵消 C';svg.appendChild(fix);
+      }
+    }
+    document.getElementById('rr-cap').innerHTML=done?caps[mode].after:caps[mode].before;
+    document.getElementById('rr-step').textContent=done?'已执行':'就绪';
+    document.getElementById('rr-next').disabled=done;
+  }
+  return {
+    setMode:function(m,pill){mode=m;done=false;
+      pill.parentNode.querySelectorAll('.viz-pill').forEach(function(p){p.classList.remove('active');});
+      pill.classList.add('active');render();},
+    next:function(){done=true;render();},
+    reset:function(){done=false;render();},
+    init:render
+  };
+})();
+
+/* --- PR 流程 --- */
+var vizPR=(function(){
+  var step=0;
+  var steps=[
+    {cap:'① 从最新 main 创建功能分支：<code>git switch -c feature/login</code>。本地和远程的 main 一致。'},
+    {cap:'② 在 feature 分支开发并提交，commit message 里写 <code>closes #12</code> 关联 issue。'},
+    {cap:'③ 推送分支到远程：<code>git push -u origin feature/login</code>。远程出现这个分支。'},
+    {cap:'④ 在 GitHub 上发起 <strong>Pull Request</strong>：请求把 feature/login 合并进 main。'},
+    {cap:'⑤ <strong>Code Review</strong>：队友审查代码、提意见。你按意见改、再 push，PR 自动更新（不用重开）。'},
+    {cap:'⑥ 审查通过，点 <strong>Merge</strong>。feature 合并进 main，关联的 issue #12 被自动关闭。'},
+    {cap:'⑦ 清理：<code>git switch main</code> → <code>git pull</code> 同步 → <code>git branch -d feature/login</code> 删本地分支，删远程分支。'}
+  ];
+  function lane(svg,y,label,color){
+    svg.appendChild(el('line',{x1:130,y1:y,x2:620,y2:y,stroke:'#e2e8f0','stroke-width':1}));
+    var t=el('text',{x:120,y:y+4,'text-anchor':'end',fill:color,'font-size':12,'font-weight':600});t.textContent=label;svg.appendChild(t);
+  }
+  function render(){
+    var svg=document.getElementById('pr-svg');clear(svg);
+    var yLocal=60,yRemote=140,yPR=220,gap=80,x0=170;
+    lane(svg,yLocal,'本地',COL.feat);
+    lane(svg,yRemote,'远程 GitHub',COL.main);
+    lane(svg,yPR,'PR / Review',COL.merge);
+    // 本地 feature 提交(step>=1 出现, step>=2 两个)
+    if(step>=0){commit(svg,x0,yLocal,'分支',COL.featBg,COL.feat);}
+    if(step>=1){edge(svg,x0,yLocal,x0+gap,yLocal,COL.feat);commit(svg,x0+gap,yLocal,'提交',COL.featBg,COL.feat);}
+    if(step>=4){edge(svg,x0+gap,yLocal,x0+gap*2,yLocal,COL.feat);commit(svg,x0+gap*2,yLocal,'改',COL.featBg,COL.feat);}
+    // 推送到远程
+    if(step>=2){
+      svg.appendChild(el('line',{x1:x0+gap,y1:yLocal+16,x2:x0+gap,y2:yRemote-16,stroke:COL.main,'stroke-width':1.5,'stroke-dasharray':'4 3','marker-end':''}));
+      var pt=el('text',{x:x0+gap+30,y:(yLocal+yRemote)/2+4,fill:COL.main,'font-size':10,'font-family':'monospace'});pt.textContent='push';svg.appendChild(pt);
+      commit(svg,x0+gap,yRemote,'分支',COL.mainBg,COL.main);
+    }
+    if(step>=4){edge(svg,x0+gap,yRemote,x0+gap*2,yRemote,COL.main);commit(svg,x0+gap*2,yRemote,'改',COL.mainBg,COL.main);}
+    // PR
+    if(step>=3){
+      svg.appendChild(el('line',{x1:x0+gap,y1:yRemote+16,x2:x0+gap*1.6,y2:yPR-16,stroke:COL.merge,'stroke-width':1.5,'stroke-dasharray':'4 3'}));
+      var g=el('g',{transform:'translate('+(x0+gap*1.6-32)+','+(yPR-14)+')'});
+      g.appendChild(el('rect',{x:0,y:0,width:90,height:28,rx:6,fill:COL.mergeBg,stroke:COL.merge,'stroke-width':1.5}));
+      var prt=el('text',{x:45,y:18,'text-anchor':'middle',fill:COL.merge,'font-size':11,'font-weight':600});prt.textContent='PR #1';g.appendChild(prt);
+      svg.appendChild(g);
+    }
+    if(step===4){
+      var rv=el('text',{x:x0+gap*2.8,y:yPR+4,fill:COL.merge,'font-size':11});rv.textContent='💬 Review 意见';svg.appendChild(rv);
+    }
+    // 合并回 main
+    if(step>=5){
+      commit(svg,x0+gap*3.4,yRemote,'M',COL.mergeBg,COL.merge);
+      edge(svg,x0+gap*2,yRemote,x0+gap*3.4,yRemote,COL.merge);
+      ptr(svg,x0+gap*3.4,yRemote-34,'main',COL.main);
+      var ok=el('text',{x:x0+gap*3.4,y:yPR+4,'text-anchor':'middle',fill:COL.merge,'font-size':11});ok.textContent='✓ 已合并, #12 关闭';svg.appendChild(ok);
+    }
+    if(step>=6){
+      var cl=el('text',{x:x0+gap,y:yLocal-30,'text-anchor':'middle',fill:COL.ghost,'font-size':10.5});cl.textContent='分支已删';svg.appendChild(cl);
+    }
+    document.getElementById('pr-cap').innerHTML=steps[step].cap;
+    document.getElementById('pr-step').textContent='步骤 '+(step+1)+' / 7';
+    document.getElementById('pr-next').disabled=(step>=6);
+  }
+  return {next:function(){if(step<6){step++;render();}},reset:function(){step=0;render();},init:render};
+})();
+
+/* --- GitHub 合并三选项 --- */
+var vizGM=(function(){
+  var mode='merge',done=false;
+  var caps={
+    merge:{before:'feature 上有 3 个零碎提交（c1 c2 c3）。选择 <strong>Create a merge commit</strong>。',
+      after:'<strong>Create a merge commit</strong>：3 个提交<strong>原样保留</strong>，再加一个合并提交 M 接回 main。历史最完整但也最杂，能看到每一步。默认选项。'},
+    squash:{before:'feature 上有 3 个零碎提交（c1 c2 c3）。选择 <strong>Squash and merge</strong>。',
+      after:'<strong>Squash and merge</strong>：3 个提交被<strong>压扁成 1 个</strong>干净提交接到 main。main 历史最简洁，一个 PR = 一个提交。代价是丢失中间的细碎提交记录。最常用。'},
+    rebase:{before:'feature 上有 3 个零碎提交（c1 c2 c3）。选择 <strong>Rebase and merge</strong>。',
+      after:'<strong>Rebase and merge</strong>：3 个提交<strong>逐个重放</strong>到 main 后面，<strong>不产生合并提交</strong>，历史是直线。保留每个提交但没有 M 节点。介于前两者之间。'}
+  };
+  function render(){
+    var svg=document.getElementById('gm-svg');clear(svg);
+    var yMain=80,yFeat=180,bx=80,gap=95;
+    // main 基线 A B
+    commit(svg,bx,yMain,'A',COL.mainBg,COL.main);
+    edge(svg,bx,yMain,bx+gap,yMain,COL.main);
+    commit(svg,bx+gap,yMain,'B',COL.mainBg,COL.main);
+    if(!done){
+      // feature 三提交挂在下面
+      edge(svg,bx+gap,yMain,bx+gap*1.6,yFeat,COL.feat);
+      commit(svg,bx+gap*1.6,yFeat,'c1',COL.featBg,COL.feat);
+      edge(svg,bx+gap*1.6,yFeat,bx+gap*2.6,yFeat,COL.feat);
+      commit(svg,bx+gap*2.6,yFeat,'c2',COL.featBg,COL.feat);
+      edge(svg,bx+gap*2.6,yFeat,bx+gap*3.6,yFeat,COL.feat);
+      commit(svg,bx+gap*3.6,yFeat,'c3',COL.featBg,COL.feat);
+      ptr(svg,bx+gap,yMain-34,'main',COL.main);
+      ptr(svg,bx+gap*3.6,yFeat+38,'feature',COL.feat);
+    } else if(mode==='merge'){
+      edge(svg,bx+gap,yMain,bx+gap*1.6,yFeat,COL.feat);
+      commit(svg,bx+gap*1.6,yFeat,'c1',COL.featBg,COL.feat);
+      edge(svg,bx+gap*1.6,yFeat,bx+gap*2.6,yFeat,COL.feat);
+      commit(svg,bx+gap*2.6,yFeat,'c2',COL.featBg,COL.feat);
+      edge(svg,bx+gap*2.6,yFeat,bx+gap*3.6,yFeat,COL.feat);
+      commit(svg,bx+gap*3.6,yFeat,'c3',COL.featBg,COL.feat);
+      edge(svg,bx+gap,yMain,bx+gap*4.4,yMain,COL.merge);
+      edge(svg,bx+gap*3.6,yFeat,bx+gap*4.4,yMain,COL.merge);
+      commit(svg,bx+gap*4.4,yMain,'M',COL.mergeBg,COL.merge);
+      ptr(svg,bx+gap*4.4,yMain-34,'main',COL.main);
+    } else if(mode==='squash'){
+      edge(svg,bx+gap,yMain,bx+gap*2,yMain,COL.merge);
+      commit(svg,bx+gap*2,yMain,'c*',COL.mergeBg,COL.merge);
+      ptr(svg,bx+gap*2,yMain-34,'main',COL.main);
+      var sq=el('text',{x:bx+gap*2,y:yMain+44,'text-anchor':'middle',fill:COL.merge,'font-size':11});sq.textContent='c1+c2+c3 压成一个';svg.appendChild(sq);
+    } else { // rebase
+      edge(svg,bx+gap,yMain,bx+gap*2,yMain,COL.feat);
+      commit(svg,bx+gap*2,yMain,"c1'",COL.featBg,COL.feat);
+      edge(svg,bx+gap*2,yMain,bx+gap*3,yMain,COL.feat);
+      commit(svg,bx+gap*3,yMain,"c2'",COL.featBg,COL.feat);
+      edge(svg,bx+gap*3,yMain,bx+gap*4,yMain,COL.feat);
+      commit(svg,bx+gap*4,yMain,"c3'",COL.featBg,COL.feat);
+      ptr(svg,bx+gap*4,yMain-34,'main',COL.main);
+    }
+    document.getElementById('gm-cap').innerHTML=done?caps[mode].after:caps[mode].before;
+    document.getElementById('gm-step').textContent=done?'已合并':'就绪';
+    document.getElementById('gm-next').disabled=done;
+  }
+  return {
+    setMode:function(m,pill){mode=m;done=false;
+      pill.parentNode.querySelectorAll('.viz-pill').forEach(function(p){p.classList.remove('active');});
+      pill.classList.add('active');render();},
+    next:function(){done=true;render();},
+    reset:function(){done=false;render();},
+    init:render
+  };
+})();
+
+// 初始化所有图解
+[vizMR,vizFF,vizArea,vizReset,vizRR,vizPR,vizGM].forEach(function(v){try{v.init();}catch(e){}});
 </script>
